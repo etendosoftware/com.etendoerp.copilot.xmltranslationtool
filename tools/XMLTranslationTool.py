@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class XML_translation_tool(ToolWrapper):
-    name = "XML_translation_tool"
+class XMLTranslationTool(ToolWrapper):
+    name = "XMLTranslationTool"
     description = "This is a tool that receives a relative path and directly translates the content of XML from one language to another, specified within the xml"
     inputs = ["question"]
     outputs = ["translated_files_paths"]
