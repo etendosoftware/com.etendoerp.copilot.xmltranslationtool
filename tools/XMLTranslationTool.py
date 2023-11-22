@@ -27,16 +27,20 @@ class XMLTranslationTool(ToolWrapper):
         reference_data_path = absolute_path
 
         if not os.path.exists(reference_data_path):
-            raise ValueError(f"The 'referencedata' directory was not found at {reference_data_path}.")
+            raise ValueError(f"The mentioned path was not found  {reference_data_path}.")
 
         for dirpath, dirnames, filenames in os.walk(reference_data_path):
             xml_files = [f for f in filenames if f.endswith(".xml")]
             for xml_file in xml_files:
                 filepath = os.path.join(dirpath, xml_file)
+                if self.is_already_translated(filepath):
+                    continue
                 translated_file_path = self.translate_xml_file(filepath)
                 if translated_file_path:
                     translated_files_paths.append(translated_file_path)
 
+        if not translated_files_paths:
+            return "The files are already translated"
         return {"translated_files_paths": translated_files_paths}
 
     def get_language_name(self, iso_code):
@@ -126,3 +130,18 @@ class XMLTranslationTool(ToolWrapper):
                 file.write(translated_text)
 
             return f"Successfully translated file {filepath}."
+
+    def is_already_translated(self, filepath):
+           try:
+               with open(filepath, "r") as file:
+                    root = ET.parse(file).getroot()
+               for child in root:
+                   values = child.findall('value')
+                   for value in values:
+                       if value.get('isTrl', 'N') == 'Y':
+                           return True
+           except ET.ParseError:
+               return False
+           return False
+
+
