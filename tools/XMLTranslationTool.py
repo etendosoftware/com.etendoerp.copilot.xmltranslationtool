@@ -27,7 +27,8 @@ class XMLTranslationTool(ToolWrapper):
         reference_data_path = absolute_path
 
         if not os.path.exists(reference_data_path):
-            raise ValueError(f"The mentioned path was not found  {reference_data_path}.")
+            return f"The mentioned path was not found  {reference_data_path}."
+
 
         for dirpath, dirnames, filenames in os.walk(reference_data_path):
             xml_files = [f for f in filenames if f.endswith(".xml")]
