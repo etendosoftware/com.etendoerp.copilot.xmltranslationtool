@@ -1,12 +1,7 @@
 import os
-import re
-import xml.dom.minidom
 import xml.etree.ElementTree as ET
-import copy
-import pycountry
 import openai
 from copilot.core.tool_wrapper import ToolWrapper
-import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -45,6 +40,7 @@ class XMLTranslationTool(ToolWrapper):
         return {"translated_files_paths": translated_files_paths}
 
     def get_language_name(self, iso_code):
+        import pycountry
         language_part = iso_code.split('_')[0]
         language = pycountry.languages.get(alpha_2=language_part)
         if language:

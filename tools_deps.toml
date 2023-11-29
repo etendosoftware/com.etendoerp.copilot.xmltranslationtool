@@ -1,4 +1,2 @@
 [XMLTranslationTool]
-transformers = "*"
-openai = "*"
 pycountry = "==22.3.5"
