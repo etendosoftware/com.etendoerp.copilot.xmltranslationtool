@@ -7,10 +7,10 @@
 */
 
 group          = "com.etendoerp"
-version        = "1.0.0"
+version        = "1.1.0"
 description    = "Copilot Tool to translate the content of an XML file from one language to another, as specified within the XML."
 ext.artifact   = "copilot.xmltranslationtool"
-ext.repository = "https://maven.pkg.github.com/etendosoftware/com.etendoerp.platform.extensions"
+ext.repository = "https://maven.pkg.github.com/etendosoftware/com.etendoerp.copilot.extensions"
 
 configurations {
     moduleDependencyContainer
@@ -27,7 +27,7 @@ publishing {
     }
     repositories {
         maven {
-            url "https://maven.pkg.github.com/etendosoftware/com.etendoerp.platform.extensions"
+            url "https://maven.pkg.github.com/etendosoftware/com.etendoerp.copilot.extensions"
         }
     }
 }
@@ -35,7 +35,7 @@ publishing {
 repositories {
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/etendosoftware/com.etendoerp.platform.extensions"
+        url "https://maven.pkg.github.com/etendosoftware/com.etendoerp.copilot.extensions"
     }
 }
 
