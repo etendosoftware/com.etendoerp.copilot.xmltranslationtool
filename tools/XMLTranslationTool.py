@@ -1,6 +1,5 @@
 import os
 import xml.etree.ElementTree as ET
-import openai
 from copilot.core.tool_wrapper import ToolWrapper
 from dotenv import load_dotenv
 
@@ -69,6 +68,7 @@ class XMLTranslationTool(ToolWrapper):
             return segments
 
     def translate_xml_file(self, filepath):
+        import openai
         business_requirement = os.getenv("BUSINESS_TOPIC", "ERP")
         model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
         with open(filepath, "r") as file:
