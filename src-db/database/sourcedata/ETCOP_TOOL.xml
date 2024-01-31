@@ -7,11 +7,26 @@
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <ISACTIVE><![CDATA[Y]]></ISACTIVE>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <CREATED><![CDATA[2024-01-24 14:34:52.843]]></CREATED>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <CREATEDBY><![CDATA[100]]></CREATEDBY>
-<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATED><![CDATA[2024-01-24 14:34:52.843]]></UPDATED>
+<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATED><![CDATA[2024-01-31 14:21:07.134]]></UPDATED>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATEDBY><![CDATA[100]]></UPDATEDBY>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <VALUE><![CDATA[XMLTranslationTool]]></VALUE>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <NAME><![CDATA[XML Translation Tool]]></NAME>
+<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <DESCRIPTION><![CDATA[This is a tool that receives a relative path and directly translates the content of XML from one language to another, specified within the xml]]></DESCRIPTION>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <AD_MODULE_ID><![CDATA[E1DADEC82AB746A797BF09FE0CED791B]]></AD_MODULE_ID>
+<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <JSON_STRUCTURE><![CDATA[{
+  "type": "function",
+  "function": {
+    "name": "XMLTranslationTool",
+    "description": "This is a tool that receives a relative path and directly translates the content of XML from one language to another, specified within the xml",
+    "parameters": {
+      "type": "object",
+      "properties": {"query": {
+        "title": "Query",
+        "type": "string"
+      }}
+    }
+  }
+}]]></JSON_STRUCTURE>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B--></ETCOP_TOOL>
 
 </data>
