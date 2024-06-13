@@ -1,17 +1,25 @@
 import os
 import xml.etree.ElementTree as ET
-from copilot.core.tool_wrapper import ToolWrapper
-from dotenv import load_dotenv
+from typing import Type, Dict
 
-load_dotenv()
+from pydantic import BaseModel, Field
+
+from copilot.core.tool_wrapper import ToolWrapper
+
+
+class XMLTranslationToolInput(BaseModel):
+    relative_path: str = Field(description="relative path to the XML files")
+
 
 class XMLTranslationTool(ToolWrapper):
     name = "XMLTranslationTool"
-    description = "This is a tool that receives a relative path and directly translates the content of XML from one language to another, specified within the xml"
-    inputs = ["relative_path"]
-    outputs = ["translated_files_paths"]
+    description = ("This is a tool that receives a relative path and directly translates the content of XML from one "
+                   "language to another, specified within the xml")
+    args_schema: Type[BaseModel] = XMLTranslationToolInput
+    return_direct: bool = True
 
-    def run(self, relative_path, *args, **kwargs):
+    def run(self, input_params: Dict, *args, **kwargs):
+        relative_path = input_params.get("relative_path")
         translated_files_paths = []
         script_directory = os.path.dirname(os.path.abspath(__file__))
         first_level_up = os.path.dirname(script_directory)
@@ -22,7 +30,6 @@ class XMLTranslationTool(ToolWrapper):
 
         if not os.path.exists(reference_data_path):
             return f"The mentioned path was not found  {reference_data_path}."
-
 
         for dirpath, dirnames, filenames in os.walk(reference_data_path):
             xml_files = [f for f in filenames if f.endswith(".xml")]
@@ -47,30 +54,32 @@ class XMLTranslationTool(ToolWrapper):
         return None
 
     def split_xml_into_segments(self, content, max_tokens):
-            root = ET.fromstring(content)
-            segments = []
-            current_segment = ET.Element(root.tag)
+        root = ET.fromstring(content)
+        segments = []
+        current_segment = ET.Element(root.tag)
 
-            for child in root:
-                if ET.tostring(current_segment).strip().decode() == f"<{root.tag}></{root.tag}>":
-                    continue
+        for child in root:
+            if ET.tostring(current_segment).strip().decode() == f"<{root.tag}></{root.tag}>":
+                continue
 
-                if len(ET.tostring(current_segment).strip().decode()) + len(ET.tostring(child)) + 2 <= max_tokens:
-                    current_segment.append(child)
-                else:
-                    segments.append(ET.tostring(current_segment).strip().decode())
-                    current_segment = ET.Element(root.tag)
-                    current_segment.append(child)
-
-            if current_segment:
+            if len(ET.tostring(current_segment).strip().decode()) + len(ET.tostring(child)) + 2 <= max_tokens:
+                current_segment.append(child)
+            else:
                 segments.append(ET.tostring(current_segment).strip().decode())
+                current_segment = ET.Element(root.tag)
+                current_segment.append(child)
 
-            return segments
+        if current_segment:
+            segments.append(ET.tostring(current_segment).strip().decode())
+
+        return segments
 
     def translate_xml_file(self, filepath):
-        import openai
+        from openai import OpenAI
+
+        client = OpenAI()
         business_requirement = os.getenv("BUSINESS_TOPIC", "ERP")
-        model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+        model = os.getenv("OPENAI_MODEL", "gpt-4o")
         with open(filepath, "r") as file:
             first_line = file.readline().strip()
             content = file.read()
@@ -106,14 +115,12 @@ class XMLTranslationTool(ToolWrapper):
             """
 
             messages = [{"role": "system", "content": prompt}]
-            response = openai.ChatCompletion.create(
-                model=model,
-                messages=messages,
-                max_tokens=2000,
-                temperature=0
-            )
+            response = client.chat.completions.create(model=model,
+                                                      messages=messages,
+                                                      max_tokens=2000,
+                                                      temperature=0)
 
-            translations = response["choices"][0]["message"]["content"].strip().split('\n')
+            translations = response.choices[0].message.content.strip().split('\n')
 
             for i, value in enumerate(value_elements):
                 if i < len(translations):
@@ -129,16 +136,14 @@ class XMLTranslationTool(ToolWrapper):
             return f"Successfully translated file {filepath}."
 
     def is_already_translated(self, filepath):
-           try:
-               with open(filepath, "r") as file:
-                    root = ET.parse(file).getroot()
-               for child in root:
-                   values = child.findall('value')
-                   for value in values:
-                       if value.get('isTrl', 'N') == 'Y':
-                           return True
-           except ET.ParseError:
-               return False
-           return False
-
-
+        try:
+            with open(filepath, "r") as file:
+                root = ET.parse(file).getroot()
+            for child in root:
+                values = child.findall('value')
+                for value in values:
+                    if value.get('isTrl', 'N') == 'Y':
+                        return True
+        except ET.ParseError:
+            return False
+        return False
