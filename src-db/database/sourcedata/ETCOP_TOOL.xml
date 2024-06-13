@@ -7,7 +7,7 @@
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <ISACTIVE><![CDATA[Y]]></ISACTIVE>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <CREATED><![CDATA[2024-01-24 14:34:52.843]]></CREATED>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <CREATEDBY><![CDATA[100]]></CREATEDBY>
-<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATED><![CDATA[2024-01-31 14:21:07.134]]></UPDATED>
+<!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATED><![CDATA[2024-06-13 12:40:37.968]]></UPDATED>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <UPDATEDBY><![CDATA[100]]></UPDATEDBY>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <VALUE><![CDATA[XMLTranslationTool]]></VALUE>
 <!--3085CD35981A48EFAB1A2EC9E6449A7B-->  <NAME><![CDATA[XML Translation Tool]]></NAME>
@@ -20,8 +20,9 @@
     "description": "This is a tool that receives a relative path and directly translates the content of XML from one language to another, specified within the xml",
     "parameters": {
       "type": "object",
-      "properties": {"query": {
-        "title": "Query",
+      "properties": {"relative_path": {
+        "description": "relative path to the XML files",
+        "title": "Relative Path",
         "type": "string"
       }}
     }
