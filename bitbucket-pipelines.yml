@@ -1,8 +1,6 @@
 image: maven:3.8.4
-
 clone:
   depth: full
-
 definitions:
   steps:
     - step: &git-police
@@ -32,7 +30,6 @@ definitions:
           - cat response.txt
         services:
           - docker
-
     - step: &make-review
         name: Make Review Step
         script:
@@ -53,7 +50,6 @@ definitions:
           - cat response.txt
         services:
           - docker
-
     - step: &build-step
         name: SonarQube analysis
         script:
@@ -64,7 +60,6 @@ definitions:
               SONAR_EXCLUDE: node_modules, android, ios
   caches:
     sonar: ~/.sonar
-
 pipelines:
   branches:
     "{master,develop}":
