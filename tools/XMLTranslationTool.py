@@ -2,21 +2,19 @@ import os
 import xml.etree.ElementTree as ET
 from typing import Type, Dict
 
-from pydantic import BaseModel, Field
-
+from copilot.core.tool_input import ToolField, ToolInput
 from copilot.core.tool_wrapper import ToolWrapper
 
 
-class XMLTranslationToolInput(BaseModel):
-    relative_path: str = Field(description="relative path to the XML files")
+class XMLTranslationToolInput(ToolInput):
+    relative_path: str = ToolField(description="relative path to the XML files")
 
 
 class XMLTranslationTool(ToolWrapper):
     name = "XMLTranslationTool"
     description = ("This is a tool that receives a relative path and directly translates the content of XML from one "
                    "language to another, specified within the xml")
-    args_schema: Type[BaseModel] = XMLTranslationToolInput
-    return_direct: bool = True
+    args_schema: Type[ToolInput] = XMLTranslationToolInput
 
     def run(self, input_params: Dict, *args, **kwargs):
         relative_path = input_params.get("relative_path")
