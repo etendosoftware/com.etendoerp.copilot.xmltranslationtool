@@ -130,8 +130,8 @@ class XMLTranslationTool(ToolWrapper):
                     value.text = translations[i].strip()
                     value.set('isTrl', 'Y')
 
-            translated_text = ET.tostring(root).decode()
-
+            translated_text = ET.tostring(root, encoding='unicode')
+            
             with open(filepath, "w", encoding='utf-8') as file:
                 file.write(f'{first_line}\n')
                 file.write(translated_text)
