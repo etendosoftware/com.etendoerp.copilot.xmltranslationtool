@@ -30,6 +30,9 @@ class XMLTranslationTool(ToolWrapper):
             return f"The mentioned path was not found  {reference_data_path}."
 
         for dirpath, dirnames, filenames in os.walk(reference_data_path):
+            if "/.git/" in dirpath:
+                continue
+
             xml_files = [f for f in filenames if f.endswith(".xml")]
             for xml_file in xml_files:
                 filepath = os.path.join(dirpath, xml_file)
@@ -77,7 +80,7 @@ class XMLTranslationTool(ToolWrapper):
 
         client = OpenAI()
         business_requirement = os.getenv("BUSINESS_TOPIC", "ERP")
-        model = os.getenv("OPENAI_MODEL", "gpt-4o")
+        model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         with open(filepath, "r") as file:
             first_line = file.readline().strip()
             content = file.read()
@@ -89,7 +92,9 @@ class XMLTranslationTool(ToolWrapper):
                 target_language = "English"
             value_elements = []
             for child in root:
-                is_trl = 'N'
+                if child.attrib.get('trl') == 'Y':
+                    continue
+
                 values = child.findall('value')
                 for value in values:
                     if value.get('isTrl', 'N') == 'Y':
@@ -99,7 +104,7 @@ class XMLTranslationTool(ToolWrapper):
                         continue
                     value_elements.append(value)
                     is_trl = 'Y'
-                child.attrib['trl'] = is_trl
+                    child.attrib['trl'] = is_trl
 
             if not value_elements:
                 return None
@@ -125,8 +130,8 @@ class XMLTranslationTool(ToolWrapper):
                     value.text = translations[i].strip()
                     value.set('isTrl', 'Y')
 
-            translated_text = ET.tostring(root).decode()
-
+            translated_text = ET.tostring(root, encoding='unicode')
+            
             with open(filepath, "w", encoding='utf-8') as file:
                 file.write(f'{first_line}\n')
                 file.write(translated_text)
@@ -140,8 +145,8 @@ class XMLTranslationTool(ToolWrapper):
             for child in root:
                 values = child.findall('value')
                 for value in values:
-                    if value.get('isTrl', 'N') == 'Y':
-                        return True
+                    if value.get('isTrl', 'N') == 'N':
+                        return False
+            return True
         except ET.ParseError:
             return False
-        return False
