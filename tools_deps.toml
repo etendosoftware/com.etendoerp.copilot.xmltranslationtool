@@ -1,2 +1,2 @@
 [XMLTranslationTool]
-pycountry = "==22.3.5"
+pycountry = "*"
