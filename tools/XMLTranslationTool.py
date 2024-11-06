@@ -11,9 +11,10 @@ class XMLTranslationToolInput(ToolInput):
 
 
 class XMLTranslationTool(ToolWrapper):
-    name = "XMLTranslationTool"
-    description = ("This is a tool that receives a relative path and directly translates the content of XML from one "
-                   "language to another, specified within the xml")
+    name: str = "XMLTranslationTool"
+    description: str = (
+        "This is a tool that receives a relative path and directly translates the content of XML from one "
+        "language to another, specified within the xml")
     args_schema: Type[ToolInput] = XMLTranslationToolInput
 
     def run(self, input_params: Dict, *args, **kwargs):
